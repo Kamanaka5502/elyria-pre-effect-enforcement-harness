@@ -1,0 +1,14 @@
+{
+  "tenant_id": "tenant-001",
+  "energy": 20.0,
+  "debt": 1.0,
+  "reputation": 1.0,
+  "est_cost": 1.0,
+  "risk_factor": 1.0,
+  "concurrency": 1.0,
+  "e_min": 1.0,
+  "d_max": 100.0,
+  "quantum": 1.0,
+  "alpha": 0.1,
+  "beta": 0.01
+}
