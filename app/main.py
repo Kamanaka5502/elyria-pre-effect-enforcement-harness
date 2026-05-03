@@ -3,14 +3,19 @@ from fastapi import FastAPI
 from app.boundary import resolve
 from app.enforcement import apply_protected_effect, bypass_attempt_without_execute_receipt, read_state, reset_state
 from app.models import DeployRequest, DeployResponse
+from app.physics import PhysicsRequest, PhysicsResponse
+from app.physics_engine import resolve_physics
 from app.receipts import make_receipt
 
-app = FastAPI(title="Elyria Pre-Effect Enforcement Harness", version="0.1.0")
+app = FastAPI(title="Elyria Pre-Effect Enforcement Harness", version="0.2.0")
 
 
 @app.get("/")
 def root():
-    return {"proof": "No protected action reaches effect unless the governed boundary resolves EXECUTE."}
+    return {
+        "proof": "No protected action reaches effect unless the governed boundary resolves EXECUTE.",
+        "physics": "Continuation is resolved through energy, burden, debt, reputation, and admissible region checks.",
+    }
 
 
 @app.get("/state")
@@ -43,3 +48,8 @@ def protected_deploy(req: DeployRequest):
 @app.post("/protected/bypass-attempt")
 def bypass_attempt():
     return bypass_attempt_without_execute_receipt()
+
+
+@app.post("/physics/resolve", response_model=PhysicsResponse)
+def physics_resolve(req: PhysicsRequest):
+    return resolve_physics(req)
