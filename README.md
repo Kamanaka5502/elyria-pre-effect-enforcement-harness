@@ -2,7 +2,7 @@
 
 # ELYRIA PRE-EFFECT ENFORCEMENT HARNESS v0.1
 
-### Bounded proof that protected actions cannot reach effect unless the governed boundary resolves EXECUTE
+### Deliberately bounded client-facing proof harness for one invariant: only EXECUTE may bind protected effect
 
 **ELYRIA SYSTEMS — VA**  
 **Samantha Revita · Terry Snyder**
@@ -10,12 +10,30 @@
 [![CI](https://github.com/Kamanaka5502/elyria-pre-effect-enforcement-harness/actions/workflows/ci.yml/badge.svg)](https://github.com/Kamanaka5502/elyria-pre-effect-enforcement-harness/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-pre--effect%20boundary-009688)
-![Outcome](https://img.shields.io/badge/Outcome-EXECUTE%20%7C%20REFUSE%20%7C%20ESCALATE%20%7C%20HALT-6f42c1)
-![Effect Control](https://img.shields.io/badge/Effect%20Control-non--EXECUTE%20%3D%20NO%20EFFECT-red)
-![Replay](https://img.shields.io/badge/Receipts-replay%20material-gold)
+![Invariant](https://img.shields.io/badge/Invariant-ONLY%20EXECUTE%20MUTATES-red)
+![Receipt](https://img.shields.io/badge/Receipt-before%2Fafter%20proof-gold)
+![Replay](https://img.shields.io/badge/Replay-tokenized%20proof-6f42c1)
 ![License](https://img.shields.io/badge/License-Proprietary-black)
 
 </div>
+
+---
+
+## Posture
+
+This is a deliberately bounded client-facing proof harness.
+
+It is not a toy.
+
+It is not a concept demo.
+
+It is not the full production substrate.
+
+It proves one invariant in the smallest inspectable corridor:
+
+```text
+Non-EXECUTE cannot mutate protected state.
+```
 
 ---
 
@@ -32,10 +50,55 @@ The proof is that REFUSE leaves no effect behind.
 
 ---
 
+## One-Command Proof Run
+
+```bash
+python -m app.prove --case all
+```
+
+Expected result:
+
+```text
+CASE valid_execute
+outcome=EXECUTE
+effect_bound=true
+state_changed=true
+PASS
+
+CASE invalid_authority
+outcome=REFUSE
+effect_bound=false
+state_changed=false
+PASS
+
+CASE stale_evidence
+outcome=REFUSE
+effect_bound=false
+state_changed=false
+PASS
+
+CASE degraded_visibility
+outcome=ESCALATE
+effect_bound=false
+state_changed=false
+PASS
+
+CASE integrity_failure
+outcome=HALT
+effect_bound=false
+state_changed=false
+PASS
+
+OVERALL: PRE_EFFECT_INVARIANT_HOLDS
+```
+
+---
+
 ## Boundary Rule
 
 ```text
-No protected action reaches effect unless the governed boundary resolves EXECUTE.
+Only EXECUTE may mutate protected state.
+Every non-EXECUTE outcome must leave protected state unchanged.
 ```
 
 ---
@@ -52,11 +115,12 @@ It is a protected effect path:
 
 ```text
 request
-→ canonical runtime boundary
-→ EXECUTE / REFUSE / ESCALATE / HALT
+→ boundary decision
+→ before-state hash
 → effect control
-→ receipt
-→ replay material
+→ after-state hash
+→ receipt proof
+→ replay token
 ```
 
 ---
@@ -73,15 +137,40 @@ request
 
 ---
 
+## Receipt Proof Fields
+
+Each protected decision receipt carries before/after proof material:
+
+```json
+{
+  "boundary_decision_id": "bd_...",
+  "case_id": "stale_evidence",
+  "outcome": "REFUSE",
+  "reason_code": "STALE_EVIDENCE",
+  "effect_bound": false,
+  "before_state_hash": "sha256...",
+  "after_state_hash": "sha256...",
+  "state_changed": false,
+  "pre_effect_invariant_holds": true,
+  "policy_hash": "sha256...",
+  "request_hash": "sha256...",
+  "replay_token": "replay_..."
+}
+```
+
+The receipt carries the proof. The test suite confirms it.
+
+---
+
 ## Pressure Cases
 
 ```text
-valid execute
-revoked authority
-degraded visibility
-integrity halt
-bypass missing EXECUTE receipt
-stale evidence
+valid_execute        → EXECUTE  → state_changed=true
+invalid_authority    → REFUSE   → state_changed=false
+stale_evidence       → REFUSE   → state_changed=false
+degraded_visibility  → ESCALATE → state_changed=false
+integrity_failure    → HALT     → state_changed=false
+bypass_attempt       → BLOCKED  → state_changed=false
 ```
 
 ---
@@ -99,9 +188,12 @@ If any non-EXECUTE outcome changes protected state, the harness fails.
 ```text
 Protected action proposed
 → runtime boundary resolves
+→ before-state hash captured
+→ effect attempt controlled
+→ after-state hash captured
 → non-EXECUTE cannot mutate protected state
-→ EXECUTE may bind effect
-→ receipt hash and replay token are emitted
+→ receipt proves state posture
+→ replay token binds proof material
 ```
 
 ---
@@ -111,3 +203,5 @@ Protected action proposed
 This repository is a public proof surface.
 
 It does not grant open-source rights, production deployment rights, commercial use rights, or access to protected runtime implementation.
+
+Small is not the weakness. Small is the proof discipline.
