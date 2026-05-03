@@ -76,3 +76,17 @@ def test_non_execute_never_changes_state():
         data = client.post("/protected/deploy", json=load(fixture)).json()
         assert data["effect_bound"] is False
         assert read_state() == before
+
+
+def test_physics_abort_under_high_strain():
+    data = client.post("/physics/resolve", json=load("physics_abort_high_strain.json")).json()
+    assert data["decision"] == "ABORT"
+    assert data["admissible_region"] is False
+    assert data["capacity_phi"] < 0 or data["debt_after"] > 100.0
+
+
+def test_physics_dream_when_headroom_is_high():
+    data = client.post("/physics/resolve", json=load("physics_dream_headroom.json")).json()
+    assert data["decision"] == "DREAM"
+    assert data["admissible_region"] is True
+    assert data["record_hash"] == data["record"]["sig"]
