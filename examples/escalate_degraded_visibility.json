@@ -1,0 +1,9 @@
+{
+  "action_id": "deploy-003",
+  "actor_id": "operator-003",
+  "authority_valid": true,
+  "evidence_fresh": true,
+  "visibility_ok": false,
+  "integrity_ok": true,
+  "requested_version": "v1.0.2"
+}
