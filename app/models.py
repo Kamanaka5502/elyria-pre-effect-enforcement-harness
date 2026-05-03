@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Any
 from pydantic import BaseModel
 
 
@@ -28,3 +29,11 @@ class DeployResponse(BaseModel):
     receipt_hash: str
     replay_token: str
     state_after: dict
+    boundary_decision_id: str
+    before_state_hash: str
+    after_state_hash: str
+    state_changed: bool
+    pre_effect_invariant_holds: bool
+    policy_hash: str
+    request_hash: str
+    receipt: dict[str, Any]
