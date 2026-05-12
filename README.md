@@ -7,7 +7,6 @@
 **ELYRIA SYSTEMS — VA**  
 **Samantha Revita · Founder of Elyria Systems**
 
-[![CI](https://github.com/Kamanaka5502/elyria-pre-effect-enforcement-harness/actions/workflows/ci.yml/badge.svg)](https://github.com/Kamanaka5502/elyria-pre-effect-enforcement-harness/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-pre--effect%20boundary-009688)
 ![Invariant](https://img.shields.io/badge/Invariant-ONLY%20EXECUTE%20MUTATES-red)
@@ -206,4 +205,4 @@ It does not grant open-source rights, production deployment rights, commercial u
 
 Small is not the weakness. Small is the proof discipline.
 
-<!-- public-proof-surface-refresh -->
+<!-- public-proof-surface-no-live-ci-badge -->
