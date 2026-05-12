@@ -5,7 +5,7 @@
 ### Deliberately bounded client-facing proof harness for one invariant: only EXECUTE may bind protected effect
 
 **ELYRIA SYSTEMS — VA**  
-**Samantha Revita**
+**Samantha Revita · Founder of Elyria Systems**
 
 [![CI](https://github.com/Kamanaka5502/elyria-pre-effect-enforcement-harness/actions/workflows/ci.yml/badge.svg)](https://github.com/Kamanaka5502/elyria-pre-effect-enforcement-harness/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12-blue)
