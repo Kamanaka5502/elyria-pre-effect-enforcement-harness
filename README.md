@@ -205,3 +205,5 @@ This repository is a public proof surface.
 It does not grant open-source rights, production deployment rights, commercial use rights, or access to protected runtime implementation.
 
 Small is not the weakness. Small is the proof discipline.
+
+<!-- public-proof-surface-refresh -->
