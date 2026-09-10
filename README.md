@@ -4,7 +4,7 @@
 
 ### Deliberately bounded client-facing proof harness for one invariant: only EXECUTE may bind protected effect
 
-**ELYRIA SYSTEMS — VA**  
+**ELYRIA SYSTEMS**  
 **Samantha Revita · Founder of Elyria Systems**
 
 ![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12-blue)
